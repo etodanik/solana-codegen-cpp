@@ -1,0 +1,15 @@
+{% extends "layout.njk" %}
+{% import "macros.njk" as macros %}
+
+{% block main %}
+
+const FString {{ program.name | snakeCase | upper }}_PROGRAM_ID = "{{ program.publicKey }}";
+
+class {{ program.name | pascalCase }}Program {
+  static FString Name = {{ program.name }};
+  static FString PublicKey = {{ program.name | snakeCase | upper }}_PROGRAM_ID;
+  static GetErrorFromCode(int code);
+  static GetErrorFromName(FString errorName);
+}
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "generate": "deno run --allow-read --allow-write --allow-env=LOG --allow-run=clang-format main.ts"
+  },
+  "imports": {
+    "std/": "https://deno.land/std@0.208.0/",
+    "kinobi": "npm:@metaplex-foundation/kinobi@0.16.9",
+    "cross_dirname": "https://deno.land/x/cross_dirname@v0.1.0/mod.ts",
+    "nunjucks": "npm:nunjucks@3.2.4",
+    "chalk": "npm:chalk@5.3.0",
+    "immutable": "npm:immutable@5.0.0-beta.4"
+  }
+}
