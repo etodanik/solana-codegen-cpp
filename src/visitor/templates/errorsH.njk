@@ -1,0 +1,21 @@
+{% extends "layout.njk" %}
+
+{% block main %}
+#pragma once
+
+{{ includes }}
+
+enum class E{{ program.name | pascalCase }}Error : uint32_t {
+{% for error in errors | sort(false, false, 'code') %}
+    // {{ error.code }} - {{ error.message }}
+    {{ error.name | pascalCase }} = 0x{{ error.code.toString(16) | upper }},
+{% endfor %}
+};
+
+class SOLANA_API U{{ program.name | pascalCase }}Helper : public UObject
+{
+public:
+    static FString GetErrorMessage(E{{ program.name | pascalCase }}Error ErrorCode);
+};
+
+{% endblock %}

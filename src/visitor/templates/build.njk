@@ -1,0 +1,33 @@
+using UnrealBuildTool;
+
+public class {{pluginName}} : ModuleRules
+{
+	public {{pluginName}}(ReadOnlyTargetRules Target) : base(Target)
+	{
+		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+		PublicIncludePaths.AddRange(new string[] { });
+		PrivateIncludePaths.AddRange(new string[] { });
+
+		PublicDependencyModuleNames.AddRange(
+			new[]
+			{
+				"Core",
+				// "Json",
+				// "JsonRpc",
+				"JsonUtilities"
+			}
+		);
+
+		PrivateDependencyModuleNames.AddRange(
+			new[]
+			{
+				"CoreUObject",
+				"Engine",
+				"Slate",
+				"SlateCore"
+			}
+		);
+
+		DynamicallyLoadedModuleNames.AddRange(new string[] { });
+	}
+}

@@ -1,0 +1,20 @@
+{% extends "layout.njk" %}
+{% import "macros.njk" as macros %}
+
+{% block main %}
+#include "{{ pluginName }}.h"
+
+#define LOCTEXT_NAMESPACE "F{{ pluginName }}Module"
+
+void F{{ pluginName }}Module::StartupModule()
+{
+}
+
+void F{{ pluginName }}Module::ShutdownModule()
+{
+}
+
+#undef LOCTEXT_NAMESPACE
+
+IMPLEMENT_MODULE(F{{ pluginName }}Module, {{ pluginName }})
+{% endblock %}

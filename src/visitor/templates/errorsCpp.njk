@@ -1,0 +1,20 @@
+{% extends "layout.njk" %}
+
+{% block main %}
+
+{{ includes }}
+
+FString U{{ program.name | pascalCase }}Helper::GetErrorMessage(E{{ program.name | pascalCase }}Error ErrorCode)
+{
+    switch (ErrorCode)
+    {
+        {%- for error in errors | sort(false, false, 'code') %}
+        case E{{ program.name | pascalCase }}Error::{{ error.name | pascalCase }}:
+            return TEXT("{{ error.message }}");
+        {% endfor %}
+        default:
+            return TEXT("Unknown error");
+    }
+}
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "layout.njk" %}
+{% import "macros.njk" as macros %}
+
+{% block main %}
+#pragma once
+
+{{ includes }}
+
+struct {{ instruction.name | pascalCase }}InstructionData {
+  {% for arg in instructionArgs %}
+    {% if arg.default %}
+      {{ arg.type }} {{ arg.name | pascalCase }};
+    {% endif %}
+  {% endfor %}
+};
+
+{% if hasArgs %}
+struct {{ instruction.name | pascalCase }}InstructionArgs {
+  {% for arg in instructionArgs %}
+    {% if not arg.default %}
+      {{ arg.type }} {{ arg.name | pascalCase }};
+    {% endif %}
+  {% endfor %}
+};
+{% endif %}
+
+{% for nestedStruct in typeManifest.nestedStructs %}
+{{ nestedStruct }}
+{% endfor %}
+
+{% endblock %}   

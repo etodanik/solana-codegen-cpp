@@ -1,6 +1,13 @@
 {
   "tasks": {
-    "generate": "deno run --allow-read --allow-write --allow-env=LOG --allow-run=clang-format main.ts"
+    "generate": "deno run --allow-all src/mod.ts && deno task clang-format",
+    "clang-format-headers": "deno run --allow-all npm:clang-format -i generated/Solana/**/*.h",
+    "clang-format-source": "deno run --allow-all npm:clang-format -i generated/Solana/**/*.cpp",
+    "clang-format": "deno task clang-format-headers && deno task clang-format-source",
+    "test-integration": "deno task generate && deno run --allow-all scripts/ue-build.ts"
+  },
+  "fmt": {
+    "lineWidth": 140
   },
   "imports": {
     "std/": "https://deno.land/std@0.208.0/",
@@ -8,6 +15,12 @@
     "cross_dirname": "https://deno.land/x/cross_dirname@v0.1.0/mod.ts",
     "nunjucks": "npm:nunjucks@3.2.4",
     "chalk": "npm:chalk@5.3.0",
-    "immutable": "npm:immutable@5.0.0-beta.4"
+    "immutable": "npm:immutable@5.0.0-beta.4",
+    "@kinobi-so/nodes": "npm:@kinobi-so/nodes@0.20.4",
+    "@kinobi-so/renderers-core": "npm:@kinobi-so/renderers-core@0.20.4",
+    "@kinobi-so/visitors-core": "npm:@kinobi-so/visitors-core@0.20.4",
+    "@kinobi-so/errors": "npm:@kinobi-so/errors@0.20.4",
+    "@kinobi-so/nodes-from-anchor": "npm:@kinobi-so/nodes-from-anchor@0.20.6",
+    "@solana/codecs-strings": "npm:@solana/codecs-strings@^2.0.0-preview.3"
   }
 }
