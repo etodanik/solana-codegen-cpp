@@ -1,8 +1,8 @@
 {
   "tasks": {
     "generate": "deno run --allow-all src/mod.ts && deno task clang-format",
-    "clang-format-headers": "deno run --allow-all npm:clang-format -i generated/Solana/**/*.h",
-    "clang-format-source": "deno run --allow-all npm:clang-format -i generated/Solana/**/*.cpp",
+    "clang-format-headers": "deno run --allow-all npm:clang-format -i generated/SolanaProgram/**/*.h",
+    "clang-format-source": "deno run --allow-all npm:clang-format -i generated/SolanaProgram/**/*.cpp",
     "clang-format": "deno task clang-format-headers && deno task clang-format-source",
     "test-integration": "deno task generate && deno run --allow-all scripts/ue-build.ts"
   },

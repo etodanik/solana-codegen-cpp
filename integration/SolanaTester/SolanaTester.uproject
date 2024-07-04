@@ -1,0 +1,27 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.4",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "SolanaTester",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "SolanaProgram",
+			"Enabled": true
+		},
+		{
+			"Name": "Solana",
+			"Enabled": true
+		},
+		{
+			"Name": "BorshUnreal",
+			"Enabled": true
+		}
+	]
+}

@@ -35,7 +35,7 @@ export function getRenderMapVisitor(options: GetRenderMapOptions = {}) {
 
     const renderParentInstructions = options.renderParentInstructions ?? false;
     const dependencyMap = options.dependencyMap ?? {};
-    const pluginName = pascalCase(options.pluginName ?? "Solana");
+    const pluginName = pascalCase(options.pluginName ?? "SolanaProgram");
     const typeManifestVisitor = getTypeManifestVisitor({ pluginName });
 
     return pipe(
@@ -217,13 +217,20 @@ export function getRenderMapVisitor(options: GetRenderMapOptions = {}) {
                         parentName: `${pascalCase(node.name)}InstructionData`,
                     });
                     const typeManifest = visit(struct, structVisitor);
-
+                    // console.log("node", node);
                     return new RenderMap().add(
                         `Source/${pascalCase(pluginName)}/Public/${pascalCase(pluginName)}/Instructions/${pascalCase(node.name)}.h`,
                         render("instructionsH.njk", {
                             hasArgs,
                             hasOptional,
                             includes: includes
+                                .add([
+                                    "Solana/AccountMeta.h",
+                                    "Solana/Instruction.h",
+                                    "Solana/PublicKey.h",
+                                    "SolanaProgram/Programs.h",
+                                    "Borsh/Borsh.h",
+                                ])
                                 .remove(
                                     `${pascalCase(node.name)}.h`,
                                 )
@@ -307,13 +314,19 @@ export function getRenderMapVisitor(options: GetRenderMapOptions = {}) {
                     };
 
                     const map = new RenderMap();
-                    // if (programsToExport.length > 0) {
-                    //     map.add("programs.rs", render("programsMod.njk", ctx))
-                    //         .add(
-                    //             "errors/mod.rs",
-                    //             render("errorsMod.njk", ctx),
-                    //         );
-                    // }
+                    if (programsToExport.length > 0) {
+                        map.add(
+                            `Source/${pascalCase(pluginName)}/Public/${pascalCase(pluginName)}/Programs.h`,
+                            render("programsH.njk", {
+                                ...ctx,
+                                includes: new IncludeMap().add("Solana/PublicKey.h"),
+                            }),
+                        );
+                        // .add(
+                        //     "errors/mod.rs",
+                        //     render("errorsMod.njk", ctx),
+                        // );
+                    }
                     // if (accountsToExport.length > 0) {
                     //     map.add(
                     //         "accounts/mod.rs",

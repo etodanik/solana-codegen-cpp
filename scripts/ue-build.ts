@@ -35,8 +35,8 @@ const buildScript = getBuildScript(Deno.build.os);
 const buildCommand = Deno.build.os === "windows"
   ? resolve(unrealEngineRoot, "Engine", "Build", "BatchFiles", buildScript)
   : resolve(unrealEngineRoot, "Engine", "Build", "BatchFiles", getUnrealPlatform(Deno.build.os), buildScript);
-const generatedPath = resolve(dirname, "..", "generated", "Solana");
-const pluginPath = resolve(dirname, "..", "integration", "SolanaTester", "Plugins", "Solana");
+const generatedPath = resolve(dirname, "..", "generated", "SolanaProgram");
+const pluginPath = resolve(dirname, "..", "integration", "SolanaTester", "Plugins", "SolanaProgram");
 const projectPath = resolve(dirname, "..", "integration", "SolanaTester", "SolanaTester.uproject");
 
 try {

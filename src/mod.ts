@@ -11,7 +11,7 @@ import { rootNodeFromAnchor } from "@kinobi-so/nodes-from-anchor";
 const rootDir = join(getDirname(), "..");
 const clientDir = join(rootDir, "generated");
 const idlDir = join(rootDir, "idls");
-const path = join(clientDir, "Solana");
+const path = join(clientDir, "SolanaProgram");
 const staticPath = resolve(
     rootDir,
     "src",

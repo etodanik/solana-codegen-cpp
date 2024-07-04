@@ -1,0 +1,28 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "SolanaProgram",
+	"Description": "Auto generated Solana client",
+	"Category": "Web",
+	"CreatedBy": "Solana C++ Code Generator",
+	"CreatedByURL": "https://github.com/etodanik/solana-cpp-codegen",
+	"DocsURL": "https://github.com/etodanik/solana-cpp-codegen",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Dependencies": [
+		"JsonRpc"
+	],
+	"Modules": [
+		{
+			"Name": "SolanaProgram",
+			"Type": "Runtime",
+			"LoadingPhase": "PreLoadingScreen"
+		}
+	],
+	"Plugins": []
+}

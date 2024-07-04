@@ -6,13 +6,39 @@
 
 {{ includes }}
 
-struct {{ instruction.name | pascalCase }}InstructionData {
-  {% for arg in instructionArgs %}
-    {% if arg.default %}
-      {{ arg.type }} {{ arg.name | pascalCase }};
+// Accounts.
+struct {{ instruction.name | pascalCase }}Accounts {
+  {% for account in instruction.accounts %}
+    {% if account.docs.length > 0 %}
+      {{ macros.docblock(account.docs) }}
+    {% endif %}
+    {% if account.isOptional %}
+      TOptional<FAccountMeta> {{ account.name | pascalCase }};
+    {% else %}
+      FAccountMeta {{ account.name | pascalCase }};
     {% endif %}
   {% endfor %}
 };
+
+
+struct {{ instruction.name | pascalCase }}InstructionData {
+  {% for arg in instructionArgs %}
+    {% if arg.default %}
+      {{ arg.type }} {{ arg.name | pascalCase }} = {{ arg.value }};
+    {% endif %}
+  {% endfor %}
+};
+
+inline auto serialize({{ instruction.name | pascalCase }}InstructionData& Data, borsh::Serializer& Serializer)
+{
+	return Serializer(
+    {%- for arg in instructionArgs -%}
+      {%- if arg.default -%}
+        Data.{{ arg.name | pascalCase }}
+      {%- endif -%}
+    {%- endfor -%}
+  );
+}
 
 {% if hasArgs %}
 struct {{ instruction.name | pascalCase }}InstructionArgs {
@@ -22,10 +48,32 @@ struct {{ instruction.name | pascalCase }}InstructionArgs {
     {% endif %}
   {% endfor %}
 };
+
+inline auto serialize({{ instruction.name | pascalCase }}InstructionArgs& Args, borsh::Serializer& Serializer)
+{
+	return Serializer(
+    {%- for arg in instructionArgs -%}
+      {%- if not arg.default -%}
+        Args.{{ arg.name | pascalCase }}
+      {%- endif -%}
+    {%- endfor -%}
+  );
+}
 {% endif %}
 
 {% for nestedStruct in typeManifest.nestedStructs %}
 {{ nestedStruct }}
 {% endfor %}
+
+struct {{ instruction.name | pascalCase }}Instruction : FInstruction
+{
+	{{ instruction.name | pascalCase }}Instruction(FPublicKey GameDataAccount)
+	{
+		ProgramId = G{{ program.name | pascalCase }}ID;
+		Accounts.Add(FAccountMeta(GameDataAccount, true, false));
+		{{ instruction.name | pascalCase }}InstructionData Data;
+		TArray<uint8_t> SerializedData = BorshSerialize(Data);
+	}
+};
 
 {% endblock %}   

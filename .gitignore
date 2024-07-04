@@ -3,4 +3,13 @@
 .vscode
 clients/*
 generated
-integration
+integration/SolanaTester/Binaries
+integration/SolanaTester/Build
+integration/SolanaTester/Saved
+integration/SolanaTester/Intermediate
+integration/SolanaTester/DerivedDataCache
+integration/SolanaTester/Plugins/*/Binaries
+integration/SolanaTester/Plugins/*/Build
+integration/SolanaTester/Plugins/*/Saved
+integration/SolanaTester/Plugins/*/Intermediate
+integration/SolanaTester/Plugins/*/DerivedDataCache

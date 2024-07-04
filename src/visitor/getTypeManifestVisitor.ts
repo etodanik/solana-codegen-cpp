@@ -28,7 +28,7 @@ export type TypeManifest = {
 export function getTypeManifestVisitor(
     options: { nestedStruct?: boolean; parentName?: string | null; pluginName?: string } = {},
 ) {
-    const pluginName: string = options.pluginName ?? "Solana";
+    const pluginName: string = options.pluginName ?? "SolanaProgram";
     let parentName: string | null = options.parentName ?? null;
     let nestedStruct: boolean = options.nestedStruct ?? false;
     let inlineStruct: boolean = false;
@@ -331,10 +331,10 @@ export function getTypeManifestVisitor(
                 visitPublicKeyType() {
                     return {
                         includes: new IncludeMap().add(
-                            "PublicKey.h",
+                            "Solana/PublicKey.h",
                         ),
                         nestedStructs: [],
-                        type: "PublicKey",
+                        type: "FPublicKey",
                     };
                 },
 
@@ -437,7 +437,7 @@ export function getTypeManifestVisitor(
                     inlineStruct = originalInlineStruct;
                     nestedStruct = originalNestedStruct;
 
-                    const fieldName = snakeCase(structFieldType.name);
+                    const fieldName = pascalCase(structFieldType.name);
                     const docblock = cppDocblock(structFieldType.docs);
                     const macro = "";
                     const resolvedNestedType = resolveNestedTypeNode(

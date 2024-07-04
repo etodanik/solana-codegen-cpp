@@ -1,0 +1,3 @@
+[submodule "integration/SolanaTester/Plugins/BorshUnreal"]
+	path = integration/SolanaTester/Plugins/BorshUnreal
+	url = git@github.com:etodanik/BorshUnreal.git

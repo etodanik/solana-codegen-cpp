@@ -3,10 +3,12 @@
 {% block main %}
 #pragma once
 
+{{ includes }}
+
 {% for program in programsToExport | sort(false, false, 'name') %}
 
   // `{{ program.name | constantCase }}` program ID.
-  const {{ program.name | constantCase | upper }}_ID: PublicKey = PublicKey("{{ program.publicKey }}");
+  const FPublicKey G{{ program.name | pascalCase }}ID = FPublicKey(TEXT("{{ program.publicKey }}"));
 {% endfor %}
 
 {% endblock %}

@@ -1,12 +1,4 @@
-import {
-    arrayValueNode,
-    bytesValueNode,
-    isNode,
-    numberValueNode,
-    pascalCase,
-    RegisteredValueNode,
-    ValueNode,
-} from "@kinobi-so/nodes";
+import { arrayValueNode, bytesValueNode, isNode, numberValueNode, pascalCase, RegisteredValueNode, ValueNode } from "@kinobi-so/nodes";
 import { visit, Visitor } from "@kinobi-so/visitors-core";
 
 import { IncludeMap } from "./IncludeMap.ts";
@@ -36,7 +28,7 @@ export function renderValueNodeVisitor(useStr: boolean = false): Visitor<
                 imports: new IncludeMap().mergeWith(
                     ...list.map((c) => c.imports),
                 ),
-                render: `[${list.map((c) => c.render).join(", ")}]`,
+                render: `{${list.map((c) => c.render).join(", ")}}`,
             };
         },
         visitBooleanValue(node) {
@@ -69,11 +61,8 @@ export function renderValueNodeVisitor(useStr: boolean = false): Visitor<
             ) {
                 const numberManifest = visit(node.value, this);
                 const { format, endian } = node.type;
-                const byteFunction = endian === "le"
-                    ? "to_le_bytes"
-                    : "to_be_bytes";
-                numberManifest.render =
-                    `${numberManifest.render}${format}.${byteFunction}()`;
+                const byteFunction = endian === "le" ? "to_le_bytes" : "to_be_bytes";
+                numberManifest.render = `${numberManifest.render}${format}.${byteFunction}()`;
                 return numberManifest;
             }
             throw new Error("Unsupported constant value type.");
@@ -129,8 +118,8 @@ export function renderValueNodeVisitor(useStr: boolean = false): Visitor<
         },
         visitPublicKeyValue(node) {
             return {
-                imports: new IncludeMap().add("PublicKey.h"),
-                render: `PublicKey("${node.publicKey}")`,
+                imports: new IncludeMap().add("Solana/PublicKey.h"),
+                render: `FPublicKey("${node.publicKey}")`,
             };
         },
         visitSetValue(node) {
@@ -154,9 +143,7 @@ export function renderValueNodeVisitor(useStr: boolean = false): Visitor<
         visitStringValue(node) {
             return {
                 imports: new IncludeMap(),
-                render: useStr
-                    ? `${JSON.stringify(node.string)}`
-                    : `FString(TEXT(${JSON.stringify(node.string)}))`,
+                render: useStr ? `${JSON.stringify(node.string)}` : `FString(TEXT(${JSON.stringify(node.string)}))`,
             };
         },
         visitStructFieldValue(node) {
