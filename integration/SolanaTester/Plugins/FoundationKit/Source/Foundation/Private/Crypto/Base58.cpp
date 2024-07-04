@@ -17,7 +17,7 @@ Author: Jon Sawler
 */
 #include "Crypto/Base58.h"
 
-#include "CryptoUtils.h"
+#include "Crypto/CryptoUtils.h"
 #include "Math/BigInt.h"
 #include <string>
 
@@ -47,6 +47,11 @@ TArray<uint8> FBase58::DecodeBase58(const FString& encoded)
 			//Error
 		}
 		intData = intData * 58 + digit;
+	}
+	
+	for (int i = 0; i < encoded.Len() && encoded[i] == '1'; i++)
+	{
+		result.Add(0);
 	}
 
 	uint32*       bits = intData.GetBits();

@@ -74,10 +74,10 @@ export function getTypeManifestVisitor(
                     const childManifest = visit(arrayType.item, self);
 
                     if (isNode(arrayType.count, "fixedCountNode")) {
-                        childManifest.includes.add("Containers/StaticArray.h");
                         return {
                             ...childManifest,
-                            type: `TStaticArray<${childManifest.type}, ${arrayType.count.value}>`,
+                            type: `${childManifest.type}`,
+                            typeSuffix: `[${arrayType.count.value}]`
                         };
                     }
 
@@ -446,13 +446,13 @@ export function getTypeManifestVisitor(
 
                     if (inlineStruct) {
                         throw new Error("inlineStruct not implemented");
-                    }
-
+                    } 
+                    
                     return {
                         ...fieldManifest,
                         type: inlineStruct
-                            ? `${docblock}${macro}${fieldManifest.type} ${fieldName};`
-                            : `${docblock}${macro}${fieldManifest.type} ${fieldName};`,
+                            ? `${docblock}${macro}${fieldManifest.type} ${fieldName}${fieldManifest.typeSuffix};`
+                            : `${docblock}${macro}${fieldManifest.type} ${fieldName}${fieldManifest.typeSuffix};`,
                     };
                 },
 

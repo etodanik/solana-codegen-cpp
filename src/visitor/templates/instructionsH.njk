@@ -7,7 +7,7 @@
 {{ includes }}
 
 // Accounts.
-struct {{ instruction.name | pascalCase }}Accounts {
+struct F{{ instruction.name | pascalCase }}Accounts {
   {% for account in instruction.accounts %}
     {% if account.docs.length > 0 %}
       {{ macros.docblock(account.docs) }}
@@ -21,15 +21,15 @@ struct {{ instruction.name | pascalCase }}Accounts {
 };
 
 
-struct {{ instruction.name | pascalCase }}InstructionData {
+struct F{{ instruction.name | pascalCase }}InstructionData {
   {% for arg in instructionArgs %}
     {% if arg.default %}
-      {{ arg.type }} {{ arg.name | pascalCase }} = {{ arg.value }};
+      {{ arg.type }} {{ arg.name | pascalCase }}{{ arg.typeSuffix }} = {{ arg.value }};
     {% endif %}
   {% endfor %}
 };
 
-inline auto serialize({{ instruction.name | pascalCase }}InstructionData& Data, borsh::Serializer& Serializer)
+inline auto serialize(F{{ instruction.name | pascalCase }}InstructionData& Data, borsh::Serializer& Serializer)
 {
 	return Serializer(
     {%- for arg in instructionArgs -%}
@@ -41,15 +41,15 @@ inline auto serialize({{ instruction.name | pascalCase }}InstructionData& Data, 
 }
 
 {% if hasArgs %}
-struct {{ instruction.name | pascalCase }}InstructionArgs {
+struct F{{ instruction.name | pascalCase }}InstructionArgs {
   {% for arg in instructionArgs %}
     {% if not arg.default %}
-      {{ arg.type }} {{ arg.name | pascalCase }};
+      {{ arg.type }} {{ arg.name | pascalCase }}{{ arg.typeSuffix }};
     {% endif %}
   {% endfor %}
 };
 
-inline auto serialize({{ instruction.name | pascalCase }}InstructionArgs& Args, borsh::Serializer& Serializer)
+inline auto serialize(F{{ instruction.name | pascalCase }}InstructionArgs& Args, borsh::Serializer& Serializer)
 {
 	return Serializer(
     {%- for arg in instructionArgs -%}
@@ -65,14 +65,32 @@ inline auto serialize({{ instruction.name | pascalCase }}InstructionArgs& Args, 
 {{ nestedStruct }}
 {% endfor %}
 
-struct {{ instruction.name | pascalCase }}Instruction : FInstruction
+struct F{{ instruction.name | pascalCase }}Instruction : FInstruction
 {
-	{{ instruction.name | pascalCase }}Instruction(FPublicKey GameDataAccount)
+	F{{ instruction.name | pascalCase }}Instruction(
+    {% for account in instruction.accounts %}
+      {%- if account.isOptional -%}
+        TOptional<FPublicKey> In{{ account.name | pascalCase }} = TOptional<FPublicKey>()
+      {%- else -%}
+        FPublicKey In{{ account.name | pascalCase }}
+      {%- endif -%}
+      {%- if not loop.last -%},{%- endif -%}
+    {% endfor %}
+  )
 	{
 		ProgramId = G{{ program.name | pascalCase }}ID;
-		Accounts.Add(FAccountMeta(GameDataAccount, true, false));
-		{{ instruction.name | pascalCase }}InstructionData Data;
-		TArray<uint8_t> SerializedData = BorshSerialize(Data);
+    {% for account in instruction.accounts %}
+      {%- if account.isOptional -%}
+        if (In{{ account.name | pascalCase }}).IsSet()) {
+            Accounts.Add(FAccountMeta(In{{ account.name | pascalCase }}.GetValue(), {{ account.isSigner }}, {{ account.isWritable }}));
+        }
+      {%- else -%}
+        Accounts.Add(FAccountMeta(In{{ account.name | pascalCase }}, {{ account.isSigner }}, {{ account.isWritable }}));
+      {%- endif -%}
+    {% endfor %}
+    Accounts.Add(FAccountMeta(G{{ program.name | pascalCase }}ID, false, false));
+		F{{ instruction.name | pascalCase }}InstructionData InstructionData;
+		Data = BorshSerialize(InstructionData);
 	}
 };
 

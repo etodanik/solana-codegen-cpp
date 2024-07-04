@@ -1,6 +1,6 @@
 #pragma once
 
-class FPublicKey : FString
+class SOLANA_API FPublicKey : public FString
 {
 public:
 	using FString::FString;

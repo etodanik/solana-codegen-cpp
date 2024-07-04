@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include "Containers/StaticArray.h"
 #include "Solana/AccountMeta.h"
 #include "Solana/Instruction.h"
 #include "Solana/PublicKey.h"
@@ -16,27 +15,30 @@
 #include "Borsh/Borsh.h"
 
 // Accounts.
-struct InitializeAccounts
+struct FInitializeAccounts
 {
 	FAccountMeta NewGameDataAccount;
 	FAccountMeta Signer;
 	FAccountMeta SystemProgram;
 };
 
-struct InitializeInstructionData
+struct FInitializeInstructionData
 {
-	TStaticArray<uint8, 8> Discriminator = { 175, 175, 109, 31, 13, 152, 155, 237 };
+	uint8 Discriminator[8] = { 175, 175, 109, 31, 13, 152, 155, 237 };
 };
 
-inline auto serialize(InitializeInstructionData& Data, borsh::Serializer& Serializer) { return Serializer(Data.Discriminator); }
+inline auto serialize(FInitializeInstructionData& Data, borsh::Serializer& Serializer) { return Serializer(Data.Discriminator); }
 
-struct InitializeInstruction : FInstruction
+struct FInitializeInstruction : FInstruction
 {
-	InitializeInstruction(FPublicKey GameDataAccount)
+	FInitializeInstruction(FPublicKey InNewGameDataAccount, FPublicKey InSigner, FPublicKey InSystemProgram)
 	{
 		ProgramId = GTinyAdventureID;
-		Accounts.Add(FAccountMeta(GameDataAccount, true, false));
-		InitializeInstructionData Data;
-		TArray<uint8_t>			  SerializedData = BorshSerialize(Data);
+		Accounts.Add(FAccountMeta(InNewGameDataAccount, false, true));
+		Accounts.Add(FAccountMeta(InSigner, true, true));
+		Accounts.Add(FAccountMeta(InSystemProgram, false, false));
+		Accounts.Add(FAccountMeta(GTinyAdventureID, false, false));
+		FInitializeInstructionData InstructionData;
+		Data = BorshSerialize(InstructionData);
 	}
 };

@@ -8,7 +8,7 @@ public class SolanaTester : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Foundation", "Solana", "SolanaProgram" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include "Containers/StaticArray.h"
 #include "Solana/AccountMeta.h"
 #include "Solana/Instruction.h"
 #include "Solana/PublicKey.h"
@@ -16,25 +15,26 @@
 #include "Borsh/Borsh.h"
 
 // Accounts.
-struct MoveRightAccounts
+struct FMoveRightAccounts
 {
 	FAccountMeta GameDataAccount;
 };
 
-struct MoveRightInstructionData
+struct FMoveRightInstructionData
 {
-	TStaticArray<uint8, 8> Discriminator = { 201, 13, 149, 180, 220, 208, 135, 152 };
+	uint8 Discriminator[8] = { 201, 13, 149, 180, 220, 208, 135, 152 };
 };
 
-inline auto serialize(MoveRightInstructionData& Data, borsh::Serializer& Serializer) { return Serializer(Data.Discriminator); }
+inline auto serialize(FMoveRightInstructionData& Data, borsh::Serializer& Serializer) { return Serializer(Data.Discriminator); }
 
-struct MoveRightInstruction : FInstruction
+struct FMoveRightInstruction : FInstruction
 {
-	MoveRightInstruction(FPublicKey GameDataAccount)
+	FMoveRightInstruction(FPublicKey InGameDataAccount)
 	{
 		ProgramId = GTinyAdventureID;
-		Accounts.Add(FAccountMeta(GameDataAccount, true, false));
-		MoveRightInstructionData Data;
-		TArray<uint8_t>			 SerializedData = BorshSerialize(Data);
+		Accounts.Add(FAccountMeta(InGameDataAccount, false, true));
+		Accounts.Add(FAccountMeta(GTinyAdventureID, false, false));
+		FMoveRightInstructionData InstructionData;
+		Data = BorshSerialize(InstructionData);
 	}
 };

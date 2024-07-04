@@ -1,66 +1,66 @@
 {
-    "version": "0.1.0",
-    "name": "tiny_adventure",
-    "instructions": [
-      {
-        "name": "initialize",
-        "accounts": [
-          {
-            "name": "newGameDataAccount",
-            "isMut": true,
-            "isSigner": false
-          },
-          {
-            "name": "signer",
-            "isMut": true,
-            "isSigner": true
-          },
-          {
-            "name": "systemProgram",
-            "isMut": false,
-            "isSigner": false
-          }
-        ],
-        "args": []
-      },
-      {
-        "name": "moveLeft",
-        "accounts": [
-          {
-            "name": "gameDataAccount",
-            "isMut": true,
-            "isSigner": false
-          }
-        ],
-        "args": []
-      },
-      {
-        "name": "moveRight",
-        "accounts": [
-          {
-            "name": "gameDataAccount",
-            "isMut": true,
-            "isSigner": false
-          }
-        ],
-        "args": []
-      }
-    ],
-    "accounts": [
-      {
-        "name": "GameDataAccount",
-        "type": {
-          "kind": "struct",
-          "fields": [
-            {
-              "name": "playerPosition",
-              "type": "u8"
-            }
-          ]
+  "version": "0.1.0",
+  "name": "tiny_adventure",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "newGameDataAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      }
-    ],
-    "metadata": {
-      "address": "2F2K73Sj1ygx4N9ptCegrxEDvGNLCndrsCdmUbcHej3c"
+      ],
+      "args": []
+    },
+    {
+      "name": "moveLeft",
+      "accounts": [
+        {
+          "name": "gameDataAccount",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "moveRight",
+      "accounts": [
+        {
+          "name": "gameDataAccount",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
+  ],
+  "accounts": [
+    {
+      "name": "GameDataAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "playerPosition",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "address": "2F2K73Sj1ygx4N9ptCegrxEDvGNLCndrsCdmUbcHej3c"
   }
+}

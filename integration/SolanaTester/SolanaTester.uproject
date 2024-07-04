@@ -22,6 +22,10 @@
 		{
 			"Name": "BorshUnreal",
 			"Enabled": true
+		},
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true
 		}
 	]
 }

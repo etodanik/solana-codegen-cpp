@@ -43,7 +43,7 @@ uint8 FTransaction::GetAccountIndex(const FPublicKey& Key) const
 {
 	return AccountList.IndexOfByPredicate([Key](const FAccountMeta& data) {
 		// TODO: Allow == on FPublicKey (resolve inheritance ambiguity) 
-		return data.Key.DecodeBase58() == Key.DecodeBase58();
+		return data.Key == Key;
 	});
 }
 
@@ -59,8 +59,13 @@ TArray<uint8> FTransaction::Build(const TArray<FAccount>& Signers)
 	UpdateAccountList(Signers);
 
 	const TArray<uint8> Message = BuildMessage();
-
-	TArray<uint8> Result = Sign(Message, Signers);
+UE_LOG(LogTemp, Log, TEXT("Account list size is %d"), AccountList.Num());
+	TArray<uint8> Result;
+	// Versioned transaction version 0
+	// Result.Append({ 0b10000000 });
+	TArray<uint8> SignaturesData = Sign(Message, Signers);
+	UE_LOG(LogTemp, Log, TEXT("Signatures size is %d"), SignaturesData.Num());
+	Result.Append(SignaturesData);
 	Result.Append(Message);
 
 	return Result;
@@ -76,24 +81,35 @@ void FTransaction::UpdateAccountList(const TArray<FAccount>& Signers)
 			Index = AccountList.IndexOfByPredicate([Account](const FAccountMeta& entry) {
 				return Account.PublicKeyData == entry.Key.DecodeBase58();
 			});
-			if (Index != INDEX_NONE) { AccountList.RemoveAt(Index); }
+			if (Index != INDEX_NONE)
+			{
+				AccountList.RemoveAt(Index);
+			}
 		}
 	}
 
 	// Sort write-ables to the top of list before reading Signers at the very top
 	AccountList.Sort([](const FAccountMeta& A, const FAccountMeta& B) { return A.IsWritable && !B.IsWritable; });
 
-	for (int i = 0; i < Signers.Num(); i++) { AccountList.Insert(FAccountMeta(Signers[i].PublicKeyData, true, true), i); }
+	UE_LOG(LogTemp, Log, TEXT("AccountList is %d allocated %d"), AccountList.Num(), AccountList.GetAllocatedSize());
+	for (int i = 0; i < Signers.Num(); i++)
+	{
+		AccountList.Insert(FAccountMeta(Signers[i].PublicKey, true, true), i);
+	}
+	
+	UE_LOG(LogTemp, Log, TEXT("AccountList is %d allocated %d"), AccountList.Num(), AccountList.GetAllocatedSize());
 }
 
 TArray<uint8> FTransaction::BuildMessage()
 {
 	TArray<uint8> AccountKeysBuffer;
+
 	for (FAccountMeta& AccountMeta : AccountList)
 	{
 		// Do we need to remove fee payer here????
 		AccountKeysBuffer.Append(AccountMeta.Key.DecodeBase58());
 		UpdateHeaderInfo(AccountMeta);
+		UE_LOG(LogTemp, Log, TEXT("Adding account %s length %d"), *AccountMeta.Key, AccountMeta.Key.DecodeBase58().Num());
 	}
 
 	TArray<uint8> Buffer;
@@ -103,12 +119,21 @@ TArray<uint8> FTransaction::BuildMessage()
 
 	Buffer.Append(FCryptoUtils::ShortVectorEncodeLength(AccountList.Num()));
 	Buffer.Append(AccountKeysBuffer);
+	
+	UE_LOG(LogTemp, Log, TEXT("AccountKeysBuffer size is %d for %d accounts"), AccountKeysBuffer.Num(), AccountList.Num());
+	TArray<uint8> BlockHashData = FBase58::DecodeBase58(BlockHash);
+	Buffer.Append(BlockHashData);
 
-	Buffer.Append(FBase58::DecodeBase58(BlockHash));
-
+	UE_LOG(LogTemp, Log, TEXT("BlockHashData size is %d"), BlockHashData.Num());
+	
 	const TArray<uint8> CompiledInstructions = CompileInstructions();
 	Buffer.Append(FCryptoUtils::ShortVectorEncodeLength(Instructions.Num()));
 	Buffer.Append(CompiledInstructions);
+
+	UE_LOG(LogTemp, Log, TEXT("CompiledInstructions size is %d for %d instructions"), CompiledInstructions.Num(), Instructions.Num());
+	
+	// short vector length for an empty address table lookups vector
+	// Buffer.Append(FCryptoUtils::ShortVectorEncodeLength(0));
 
 	return Buffer;
 }

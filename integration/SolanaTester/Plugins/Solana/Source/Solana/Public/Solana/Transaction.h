@@ -10,7 +10,7 @@ struct FAccount;
 struct FAccountMeta;
 struct FInstruction;
 
-class FTransaction
+class SOLANA_API FTransaction
 {
 public:
 	FTransaction(const FString& CurrentBlockHash);

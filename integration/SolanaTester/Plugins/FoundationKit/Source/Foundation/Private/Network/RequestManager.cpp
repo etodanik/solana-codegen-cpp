@@ -59,8 +59,8 @@ void FRequestManager::SendRequest(TSharedPtr<FRequestData> RequestData)
 	if (Url.IsEmpty())
 	{
 		Url = GetDefault<UFoundationSettings>()->GetNetwork() == ESolanaNetwork::DevNet
-			      ? "https://suzy-imihkz-fast-devnet.helius-rpc.com/"
-			      : "https://blisse-zgnb5y-fast-mainnet.helius-rpc.com/";
+			      ? "http://suzy-imihkz-fast-devnet.helius-rpc.com/"
+			      : "http://blisse-zgnb5y-fast-mainnet.helius-rpc.com/";
 	}
 	Request->SetURL(Url);
 	Request->SetVerb("POST");

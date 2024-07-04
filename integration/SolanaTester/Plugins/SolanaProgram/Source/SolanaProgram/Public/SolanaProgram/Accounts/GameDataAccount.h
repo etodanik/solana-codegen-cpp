@@ -6,10 +6,8 @@
  * @see https://github.com/etodanik/solana-codegen-cpp
  */
 
-#include "Containers/StaticArray.h"
-
 struct FGameDataAccount
 {
-	TStaticArray<uint8, 8> Discriminator;
-	uint8				   PlayerPosition;
+	uint8 Discriminator[8];
+	uint8 PlayerPositionundefined;
 };

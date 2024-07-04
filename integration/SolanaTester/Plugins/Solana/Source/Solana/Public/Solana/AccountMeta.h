@@ -10,7 +10,7 @@
 * Note that because the Solana runtime schedules parallel transaction execution around which accounts are writable,
 * care should be taken that only accounts which actually may be mutated are specified as writable.
  */
-struct FAccountMeta
+struct SOLANA_API FAccountMeta
 {
 	// An account’s public key.
 	FPublicKey Key;
@@ -19,6 +19,6 @@ struct FAccountMeta
 	// True if the account data or metadata may be mutated during program execution.
 	bool IsWritable;
 
-	FAccountMeta(FPublicKey InKey, bool InIsSigner, bool InIsWriteable);
-	FAccountMeta(TArray<uint8> InKeyData, bool InIsSigner, bool InIsWriteable);
+	FAccountMeta(FPublicKey InKey, bool InIsSigner, bool InisWritable);
+	FAccountMeta(TArray<uint8> InKeyData, bool InIsSigner, bool InisWritable);
 };

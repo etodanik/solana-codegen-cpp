@@ -165,11 +165,11 @@ export function getRenderMapVisitor(options: GetRenderMapOptions = {}) {
                         name: string;
                         optional: boolean;
                         type: string;
+                        typeSuffix: string;
                         value: string | null;
                     }[] = [];
                     let hasArgs = false;
                     let hasOptional = false;
-
                     node.arguments.forEach((argument) => {
                         const argumentVisitor = getTypeManifestVisitor({
                             pluginName,
@@ -178,7 +178,7 @@ export function getRenderMapVisitor(options: GetRenderMapOptions = {}) {
                         });
                         const manifest = visit(argument.type, argumentVisitor);
                         includes.mergeWith(manifest.includes);
-                        const innerOptionType = isNode(argument.type, "optionTypeNode") ? manifest.type.slice("Option<".length, -1) : null;
+                        const innerOptionType = isNode(argument.type, "optionTypeNode") ? manifest.type.slice("TOptional<".length, -1) : null;
 
                         const hasDefaultValue = !!argument.defaultValue &&
                             isNode(argument.defaultValue, VALUE_NODES);
@@ -205,6 +205,7 @@ export function getRenderMapVisitor(options: GetRenderMapOptions = {}) {
                             optional: hasDefaultValue &&
                                 argument.defaultValueStrategy !== "omitted",
                             type: manifest.type,
+                            typeSuffix: manifest.typeSuffix,
                             value: renderValue,
                         });
                     });

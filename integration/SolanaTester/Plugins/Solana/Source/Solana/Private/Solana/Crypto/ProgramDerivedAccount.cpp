@@ -1,8 +1,7 @@
-﻿#include "Crypto/ProgramDerivedAccount.h"
+﻿#include "Solana/Crypto/ProgramDerivedAccount.h"
 #include "CoreMinimal.h"
-#include "CryptoUtils.h"
+#include "Crypto/CryptoUtils.h"
 #include "Crypto/Base58.h"
-#include "ed25519/ed25519.h"
 
 FString BytesToHexString(const uint8* Bytes, int32 Length)
 {
@@ -50,9 +49,9 @@ FString FProgramDerivedAccount::CreateProgramAddress(const TArray<TArray<uint8>>
 	return FBase58::EncodeBase58(HashOutput.GetData(), HashOutput.Num());
 }
 
-bool FProgramDerivedAccount::IsOnCurve(TArray<uint8> HashOutput)
+bool FProgramDerivedAccount::IsOnCurve(const TArray<uint8> &HashOutput)
 {
-	return static_cast<bool>(is_point_on_curve(HashOutput.GetData()));
+	return FCryptoUtils::IsPointOnCurve(HashOutput);
 }
 
 TTuple<FString, int32> FProgramDerivedAccount::FindProgramAddress(const TArray<TArray<uint8>>& Seeds, const TArray<uint8>& ProgramId)

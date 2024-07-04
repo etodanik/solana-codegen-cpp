@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-class FOUNDATION_API FProgramDerivedAccount
+class SOLANA_API FProgramDerivedAccount
 {
 public:
 	static TTuple<FString, int32> FindProgramAddress(const TArray<TArray<uint8>>& Seeds, const TArray<uint8>& ProgramId);
@@ -11,5 +11,5 @@ public:
 
 private:
 	static FString CreateProgramAddress(const TArray<TArray<uint8>>& Seeds, TArray<uint8> ProgramId);
-	static bool IsOnCurve(TArray<uint8> HashOutput);
+	static bool IsOnCurve(const TArray<uint8> &HashOutput);
 };

@@ -18,7 +18,7 @@ Author: Jon Sawler
 
 #include "FEd25519Bip39.h"
 
-#include "CryptoUtils.h"
+#include "Crypto/CryptoUtils.h"
 
 const uint32 HardenedOffset = 0x80000000;
 const FString Curve = "ed25519 seed";
