@@ -21,7 +21,7 @@ const staticPath = resolve(
     "Resources",
 );
 
-const anchorIdl = readJson(join(idlDir, "tiny_adventure.json"));
+const anchorIdl = readJson(join(idlDir, "staratlas.json"));
 const node = rootNodeFromAnchor(anchorIdl);
 
 visit(

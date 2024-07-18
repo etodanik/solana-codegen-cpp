@@ -258,22 +258,20 @@ export function getTypeManifestVisitor(
                 },
 
                 visitEnumType(enumType, { self }) {
-                    throw new Error("enum not implemented");
-                    // const originalParentName = parentName;
-                    // if (!originalParentName) {
-                    //     // TODO: Add to the Rust validator.
-                    //     throw new Error("Enum type must have a parent name.");
-                    // }
+                    const originalParentName = parentName;
+                    if (!originalParentName) {
+                        throw new Error("Enum type must have a parent name.");
+                    }
 
-                    // const variants = enumType.variants.map((variant) => visit(variant, self));
-                    // const variantNames = variants.map((variant) => variant.type)
-                    //     .join("\n");
-                    // const mergedManifest = mergeManifests(variants);
+                    const variants = enumType.variants.map((variant) => visit(variant, self));
+                    const variantNames = variants.map((variant) => variant.type)
+                        .join("\n");
+                    const mergedManifest = mergeManifests(variants);
 
-                    // return {
-                    //     ...mergedManifest,
-                    //     type: `pub enum ${pascalCase(originalParentName)} {\n${variantNames}\n}`,
-                    // };
+                    return {
+                        ...mergedManifest,
+                        type: `pub enum ${pascalCase(originalParentName)} {\n${variantNames}\n}`,
+                    };
                 },
 
                 visitFixedSizeType(fixedSizeType, { self }) {
